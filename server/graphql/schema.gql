@@ -1,0 +1,113 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AuthPayload {
+  token: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Messages {
+  _id: ObjectId!
+  createdAt: DateTime!
+  createdDate: DateTime!
+  deleted: Boolean!
+  from: UserPayload!
+  message: String!
+  roomId: String!
+}
+
+type MessagesWithHasMore {
+  hasMore: Boolean!
+  messages: [Messages!]!
+}
+
+type Mutation {
+  SignIn(input: SignInInput!): AuthPayload!
+  SignUp(input: SignUpInput!): AuthPayload!
+  addRoomMember(roomId: ObjectId!, userId: String!): Room!
+  createRoom: Room!
+  insertMessage(from: UserPayloadInput!, message: String!, roomId: ObjectId!): Messages!
+  removeRoomMember(roomId: ObjectId!, userId: String!): Room!
+  updateRoomCurrTime(currTime: Float!, roomId: ObjectId!): Room!
+  updateRoomPause(isPause: Boolean!, roomId: ObjectId!): Room!
+  updateRoomType(roomId: ObjectId!, type: String!): Room!
+  updateRoomVideoUrl(roomId: ObjectId!, videoUrl: String!): Room!
+}
+
+"""Mongo object id scalar type"""
+scalar ObjectId
+
+type Query {
+  Auth: AuthPayload!
+  GetUser: UserPayload!
+  Hello: String!
+  getMessagesByRoomId(limit: Float!, roomId: ObjectId!): MessagesWithHasMore!
+  getRoomById(roomId: ObjectId!): Room!
+  usersByIds(ids: [ObjectId!]!): [User!]!
+}
+
+enum ROOM_ACCESS_ENUM {
+  PRIVATE
+  PUBLIC
+}
+
+enum ROOM_TYPES_ENUM {
+  SHARING_SCREEN
+  YOU_TUBE
+}
+
+type Room {
+  _id: ObjectId!
+  access: ROOM_ACCESS_ENUM!
+  createdAt: DateTime!
+  currTime: Float!
+  deleted: Boolean!
+  isPause: Boolean!
+  members: [String!]!
+  type: ROOM_TYPES_ENUM!
+  videoUrl: String!
+}
+
+input SignInInput {
+  email: String!
+  password: String!
+}
+
+input SignUpInput {
+  email: String!
+  password: String!
+  username: String!
+}
+
+type Subscription {
+  messageAdded: Messages!
+}
+
+type User {
+  _id: ObjectId!
+  createdAt: DateTime!
+  deleted: Boolean!
+  email: String!
+  username: String!
+}
+
+type UserPayload {
+  _id: ObjectId!
+  email: String!
+  image: String!
+  password: String!
+  username: String!
+}
+
+input UserPayloadInput {
+  _id: ObjectId!
+  email: String!
+  image: String!
+  password: String!
+  username: String!
+}
